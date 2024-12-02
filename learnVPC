@@ -1,3 +1,16 @@
 Virtual Private Cloud (VPC)
 
 A secured, isolated network segment hosted within AWS.
+Allow us to isolate resources from other resources in the cloud.
+We decide what devices are allowed to talk to what other devices in our AWS account.
+We get to decide:
+a) Subnetting (IP address): specify the IP address to be used in cloud.
+b) Routing (Route tables): where and what path packets take as they traverse through the aws acc.
+c) Firewalls (NACLS and Security groups): what type of traffic we allow in and out of our env. and to our individual resources.
+d) Gateways: customize traffic that goes in and out of our VPC.
+*VPCs are specific to a single region.*
+*VPCs acts as an network boundary* ie. we need to explicitly allow the two VPCs to communicate.
+CIDR Block (Classless Inter-Domain Routing):
+     >Every VPC has a range of IP addressses assigned to it called the CIDR block.
+     >CIDR block defines the IP addresses that resources in the VPC can use.
+     >CIDR block size can be anywhere from /16 to /28
