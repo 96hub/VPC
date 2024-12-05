@@ -10,7 +10,30 @@ c) Firewalls (NACLS and Security groups): what type of traffic we allow in and o
 d) Gateways: customize traffic that goes in and out of our VPC.
 *VPCs are specific to a single region.*
 *VPCs acts as an network boundary* ie. we need to explicitly allow the two VPCs to communicate.
+
 CIDR Block (Classless Inter-Domain Routing):
      >Every VPC has a range of IP addressses assigned to it called the CIDR block.
      >CIDR block defines the IP addresses that resources in the VPC can use.
      >CIDR block size can be anywhere from /16 to /28
+
+Subnets:
+    >Groups of IP addresses in a VPC.
+    >resides within a single availability zone.
+    >Can be made public or private to allow external access to the resources within them.
+    >the first four IP addresses are reserveed and cannot be used
+       -first:Network access
+       -second:VPC router
+       -third:DNS
+       -fourth:for future use
+    >the last IP address is reserved as the broadcast address.
+
+
+When we create a subnet, by default it is a private subnet.
+To make it a public subnet we need to use internet gateway.
+Internet gateways are attached to VPCs and are region resilient.
+Steps to make a private subnet, a public subnet:
+     >Create an Internet Gateway (IGW)
+     >Attach IGW to the VPC
+     >Create a custom route table
+     >Conigure default route
+     >Associate subnet with the route table
