@@ -15,12 +15,4 @@ CIDR Block (Classless Inter-Domain Routing):
      >CIDR block defines the IP addresses that resources in the VPC can use.
      >CIDR block size can be anywhere from /16 to /28
 
-When we create a subnet, by default it is a private subnet.
-To make it a public subnet we need to use internet gateway.
-Internet gateways are attached to VPCs and are region resilient.
-Steps to make a private subnet, a public subnet:
-     >Create an Internet Gateway (IGW)
-     >Attach IGW to the VPC
-     >Create a custom route table
-     >Conigure default route
-     >Associate subnet with the route table
+
