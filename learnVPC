@@ -37,3 +37,5 @@ Steps to make a private subnet, a public subnet:
      >Create a custom route table
      >Conigure default route
      >Associate subnet with the route table
+
+
