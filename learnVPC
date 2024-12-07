@@ -27,7 +27,7 @@ Subnets:
        -fourth:for future use
     >the last IP address is reserved as the broadcast address.
 
-
+Internet Gateway:
 When we create a subnet, by default it is a private subnet.
 To make it a public subnet we need to use internet gateway.
 Internet gateways are attached to VPCs and are region resilient.
@@ -39,3 +39,103 @@ Steps to make a private subnet, a public subnet:
      >Associate subnet with the route table
 
 
+NAT Gateway(Network Address Translation Gateway):
+It is used when we need our private subnet to access internet but not vice a versa.
+Not Region resilient
+Steps of adding NAT gateway
+     >Create an IGW 
+     >Create another public subnet 
+     >Create NAT gateway and deploy it to the public subnet
+     >set up routing so that the devices in the private subnet would have a default route that points to the NAT gateway.
+    Private subnet ----> NAT Gateway(Public subnet) ----> IGW ----> Internet
+This allows oneway conection to the internet but no initiation from the internet could be performed.
+
+Stateless firewall:A stateless firewall makes decisions about allowing or blocking network traffic based purely on predefined rules, without keeping track of the state of active connections. It treats each packet in isolation, without considering the context of the traffic flow.
+Stateful firewall: A stateful firewall tracks the state of active connections. It inspects each packet not just based on predefined rules but also based on its context within a connection. This means that the firewall understands whether a packet is part of an ongoing conversation or if it’s an unsolicited, out-of-context packet.
+
+NACL(Network Access Control List):
+    >filter traffic entering and leaving subnet
+    >Do not filter traffic within a subnet
+    >Are stateless firewalls i.e. rules are set for both inbound and outbound traffic.
+
+Security Groups:
+    >Acts as firewall for ondividual resources (EC2,RDS,LB)
+    >Stateful firewall
+
+
+>enableDNsHostnames - Determines whether the VPC supports assigning public DNS hostnames to instances with public IP
+addresses.
+>enableDnsSupport - Determines whether the VPC supports DNS resolution through the Amazon provided DNS server.
+
+Elastic IP addresses:
+a static IPv4 address. When you allocate an Elastic IP address to your account, it is yours until you release it.
+The Elastic IP can be moved from one server to another.
+     • Elastic Ips are specific to a region, cannot be moved to a different region
+     • An Elastic IP address comes from Amazon's pool of IPv4 addresses, or from a   custom IPv4 address pool that you have brought to your AWS account
+     • To use an Elastic IP address, you first allocate one to your account, and then associate it with your instance or a network interface.
+
+Load Balancer:
+a component designed to distribute incoming network traffic across multiple servers or resources to ensure high availability, fault tolerance, and scalability of applications.
+   Types of LB:
+    >Classic Load Balancer (CLB):
+     Layer: Supports both Layer 4 (TCP) and Layer 7 (HTTP/HTTPS) traffic, but with more limited capabilities compared to ALB and NLB.
+     Use Case: Best for simple use cases, such as legacy applications, or when features like host-based/path-based routing are not required.
+     Limitation:Only allows 1 SSL certificate per Classic Load Balancer.
+    >Application Load Balancer (ALB):
+     Layer: Application Layer (Layer 7)
+     Use Case: Best for HTTP and HTTPS traffic, web applications, microservices, and containerized applications.
+    >Network Load Balancer (NLB):
+     Layer: Transport Layer (Layer 4)
+     Use Case: Best for TCP, UDP, or TLS traffic, and when low latency and high throughput are critical.
+
+VPN (Virtual Private Network):
+often used to connect an on-premises data center or corporate network to an AWS Virtual Private Cloud (VPC), enabling secure communication between the two environments.
+ AWS tpes of VPN:
+  >AWS Site-to-Site VPN enables you to securely connect your on-premises network or remote office to an AWS VPC. The connection is established via the public internet, but the data is encrypted using standard IPsec (Internet Protocol Security) and AES encryption protocols.
+  >AWS Client VPN is a managed client-based VPN service that allows users to securely connect to an AWS VPC from anywhere in the world. It is commonly used for remote workers who need access to cloud resources within a VPC.
+
+Direct connect:
+*Direct connect is a physical connection into an AWS region.
+*provides a dedicated, high-speed, low-latency network connection between your on-premises data center (or corporate network) and Amazon Web Services (AWS). This dedicated connection allows you to bypass the public internet, providing a more reliable, consistent, and secure connection to AWS.
+
+VPC Peering:
+a networking connection between two Virtual Private Clouds (VPCs) in AWS that allows resources in one VPC to communicate with resources in another VPC as if they were part of the same network. This connection is private and traffic between the VPCs flows over the AWS backbone network, ensuring low-latency and high-bandwidth communication.
+  VPC Peering can be established between:
+    >Two VPCs within the same AWS account.
+    >Two VPCs in different AWS accounts (with appropriate permissions).
+    >VPCs across different AWS Regions (known as Inter-Region VPC Peering).
+
+Transit Gateway (TGW):
+ highly scalable and fully managed service that acts as a central hub to connect multiple Amazon Virtual Private Clouds (VPCs), on-premises networks, and remote offices. It simplifies network architectures by consolidating VPC connections, reducing the complexity of routing, and improving scalability and security.
+ {Easier than managing peering b/w each pair of VPCs}
+
+ PrivateLink:
+ a service that enables private, secure access to AWS services and third-party services over a private network, avoiding exposure to the public internet. It allows you to connect your VPCs to services hosted in other VPCs, AWS services, or even services from AWS Partner Network (APN) partners securely and privately.
+
+CloudFront:
+>a Content Delivery Network (CDN) service. It distributes content, such as web pages, videos, APIs, and other static or dynamic assets, to users with low latency and high transfer speeds. CloudFront leverages a global network of edge locations to cache and deliver content closer to users, ensuring a faster and more efficient experience.
+>It works seamlessly with other AWS services like S3, EC2, Lambda@Edge, and Elastic Load Balancer.
+
+{CloudFront Functions is a lightweight, high-performance compute feature designed for simple and fast request/response manipulations. It enables you to run code at CloudFront edge locations in response to viewer requests (before CloudFront forwards the request to the origin) or after CloudFront processes the response (before sending it back to the viewer).
+CloudFront Functions is ideal for lightweight, short-running functions for 
+use cases like the following:
+   • Cache key normalization – You can transform HTTP request attributes (headers, query strings, cookies, and even the URL path) to create an optimal cache key, which can improve your cache hit ratio.
+   • Header manipulation – You can insert, modify, or delete HTTP headers in the request or response. For example, you can add a TrueClient-IP header to every request.
+   • URL redirects or rewrites – You can redirect viewers to other pages based on information in the request, or rewrite all requests from one path to another.
+   • Request authorization – You can validate hashed authorization tokens, such as JSON web tokens (JWT), by inspecting authorization headers or other request metadata.
+*v/s*
+Lambda@Edge is a more feature-rich compute service that lets you run AWS Lambda functions at CloudFront edge locations. It allows you to execute more complex code and handle a broader range of custom content delivery tasks, including manipulating the request or response as it passes through the CloudFront distribution.
+Lambda@Edge is a good fit for the following scenarios:
+   • Functions that take several milliseconds or more to complete.
+   • Functions that require adjustable CPU or memory.
+   • Functions that depend on third-party libraries (including the AWS SDK, for integration with other AWS services).
+   • Functions that require network access to use external services for processing.
+   • Functions that require file system access or access to the body of HTTP requests.}
+
+Global Accelerator:
+networking service provided by AWS that improves the availability and performance of your applications by directing user traffic through the AWS global network instead of the public internet. It optimizes the path that traffic takes to reach your application, reducing latency and improving performance for global users.
+
+Route 53:
+ a scalable and highly available Domain Name System (DNS) web service designed to route user requests to endpoints such as websites, web applications, or AWS services. It provides domain registration, DNS routing, and health checking for applications.
+ >Route 53 Application Recovery Controller(ARC):
+  service that continually monitors your applications ability to recover form failrues, and to control application recovery across multiple AWS Regions, and Availability zones.
